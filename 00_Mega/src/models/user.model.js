@@ -18,7 +18,7 @@ const userSchema=new Schema(
         lowercase:true,
         trim:true,
     },
-    fullname:{
+    fullName:{
         type:String,
         required:true,
         trim:true,
@@ -55,7 +55,7 @@ const userSchema=new Schema(
 //here next is after the hash is done do the next which is save
 userSchema.pre("save",async function(next){
     if(!this.isModified("password"))return next(); // this is due to that if some other field like name changes just return
-    this.password=bcrypt.hash(this.password,10)//here 10 is just a hashround
+    this.password=await bcrypt.hash(this.password,10)//here 10 is just a hashround
     next()
 })
 
@@ -76,7 +76,7 @@ userSchema.methods.generateAccessToken=function(){
         _id:this._id,
         email:this.email,
         username:this.username,
-        fullName:this.fullname
+        fullName:this.fullName
     },
     process.env.ACCESS_TOKEN_SECRET,
     {
