@@ -1,11 +1,13 @@
 import multer from "multer"
-//there are many choise// disk or memory being the popular one
+//there are many choice// disk or memory being the popular one
 //we are using disk storage
-//taken from docucmentation
+//taken from documentation
 const storage = multer.diskStorage({
     //cb is callback
-    //the reason for using multer is we have a another option call file 
+    //the reason for using multer is we have a another prop call file 
     //which express cant handle so multer is used to handle it
+
+    //here we declare the destination and the filename
     destination: function (req, file, cb) {
       cb(null, './public/temp')
     },

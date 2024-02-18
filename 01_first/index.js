@@ -1,6 +1,6 @@
 import express from 'express'
 import 'dotenv/config'
-const App=express()
+const App=express();
 
 const delekgit={
     "login": "TenzDelek",
@@ -36,6 +36,8 @@ const delekgit={
     "created_at": "2023-01-13T12:03:36Z",
     "updated_at": "2024-01-21T08:10:01Z"
   }
+
+  //get is for retieving resource
 App.get('/',(req,res)=>{
     res.send('HELLO TENZIN')
 })
