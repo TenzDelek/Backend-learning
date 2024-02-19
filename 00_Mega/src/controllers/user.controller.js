@@ -12,9 +12,10 @@ const registerUser=asyncHandler(async(req,res)=>{
         {
             throw new ApiError(400,"All fields are required")
         }
-    //check if usre already exists:username,email
-    const existedUser=User.findOne({
-        $or: [{username},{email}]
+    //check if user already exists:username,email
+    const existedUser= await User.findOne({
+        $or: [{username},{email}] //This query is looking for a user in the User collection where 
+        //either the username or the email matches the provided values. It will return the first document that satisfies any of these conditions.
     })
     if(existedUser)
     {
@@ -22,7 +23,12 @@ const registerUser=asyncHandler(async(req,res)=>{
     }
     //check for images, check for avatar
     const avatarlocalpath=req.files?.avatar[0]?.path //files is from multer
-    const coverimagelocalpath=req.files?.coverImage[0]?.path
+    // const coverimagelocalpath=req.files?.coverImage[0]?.path
+    let coverimagelocalpath;
+    if(req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length >0)
+    {
+        coverimagelocalpath=req.files.coverImage[0].path
+    }
     
     if(!avatarlocalpath)
     {
@@ -37,7 +43,7 @@ const registerUser=asyncHandler(async(req,res)=>{
     }
     //create user objects- create entry in db
     //--User is the one that talks with the database
-    const user=awaitUser.create({
+    const user=await User.create({
         fullName,
         avatar:avatar.url,
         coverImage:coverImage?.url || '',
