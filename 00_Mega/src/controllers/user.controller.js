@@ -85,7 +85,7 @@ const loginUser=asyncHandler(async(req,res)=>{
     //req body ->data
     const {email,username,password}=req.body
     //username or email
-    if(!email || !username){
+    if(!(email || !username)){
         throw new ApiError(400,"username or emial is required")
     }
     //find the user
@@ -124,5 +124,26 @@ const loginUser=asyncHandler(async(req,res)=>{
     )
 })
 
+const logoutUser=asyncHandler(async(req,res)=>{
+    //here the small user is coming from the middleware name (auth) see the route.js
+    await User.findByIdAndUpdate(
+         req.user._id, //find by id
+        {
+            $set:{ //update
+                refreshToken:undefined
+            }
+        },
+        {
+            new:true //the return res will now get the updated value
+        }
+    )
+    const option={
+        httpOnly:true,
+        secure:true
+    }
+    return res.status(200).clearCookie("accessToken",option)
+            .clearCookie("refreshToken",option)
+            .json(new ApiResponse(200,{},"user log out"))
+})
 
-export {registerUser,loginUser}
+export {registerUser,loginUser,logoutUser}
