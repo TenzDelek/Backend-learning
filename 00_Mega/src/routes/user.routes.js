@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { loginUser, logoutUser, registerUser } from "../controllers/user.controller.js";
+import { loginUser, logoutUser, registerUser ,refreshAccessToken} from "../controllers/user.controller.js";
 import {upload} from '../middlewares/multer.middleware.js'
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 const router=Router()
@@ -29,4 +29,6 @@ router.route("/logout").post(verifyJWT, logoutUser) //HERE THE VERFITJWT
 //IS THE MIDDLWARE, FIRST IT DOES IT THEN LOGOUT IS DONE AS IN THE VERFIYJWT MIDDLEWARE
 //REMEMBER WE WROTE NEXT(). YA THAT DOES IT LIKE SEND IT TO NEXT
 
+
+router.route("/refresh-token").post(refreshAccessToken)
 export default router
