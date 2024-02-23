@@ -100,3 +100,6 @@ access token is usually short live (like 1 hr)
 refresh token is store in database access is not
 
 so to refresh the token we have to creata end point to do so
+
+#database
+usually when we try to write query related to database we use await and async as database is in other continent
