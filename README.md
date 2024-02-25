@@ -103,3 +103,23 @@ so to refresh the token we have to creata end point to do so
 
 #database
 usually when we try to write query related to database we use await and async as database is in other continent
+
+# AGGREGATION PIPELINE
+pipeline is basically like chaining (stages)
+like each stage the output of each stage will be the new starting point of the next stage , for example you start with a 100 dataset,in stage1 you did a set operation and the res data was 50 dataset now the next stage will perform on that 50 dataset not the initial one
+
+- written as
+//in an array. each object act as the stage
+db.order.aggregate([
+    //stage1 the first stage is usally the match operation
+    {
+        $match:{size:'medium'}
+    },
+    //stage2
+    {
+        $group:{_id="$name",
+        totalquantity:{
+            $sum:"$quantity"
+        }}
+    }
+])
