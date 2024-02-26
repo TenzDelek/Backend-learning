@@ -12,7 +12,7 @@ you have seen app.get right inside it we write a url like /insta and after that 
  now the middleware comes simply we can say it as a checker. whether it fullfill some requirement like whether he is login first
 now when the url is hit it check the login first then it compute the response
 
-the callback have mainly four param that are (err,req,res,next) next is a flag, when the middleware is done it pass a flag saying i am done now go to next middleware or any
+the callback have mainly four param that are (err,req,res,next) next is a flag mostly used in middelware, when the middleware is done it pass a flag saying i am done now go to next middleware or any
 
 # the cloudinary is used for file uploading ,back then we use express/fileupload but
 these days multer is more prefered
@@ -102,7 +102,7 @@ refresh token is store in database access is not
 so to refresh the token we have to creata end point to do so
 
 #database
-usually when we try to write query related to database we use await and async as database is in other continent
+usually when we try to write query related to database we use await and async as database is in other continent(model)
 
 # AGGREGATION PIPELINE
 pipeline is basically like chaining (stages)

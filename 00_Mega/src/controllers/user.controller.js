@@ -4,6 +4,7 @@ import { User } from "../models/user.model.js";
 import { uploadoncloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 
 const registerUser = asyncHandler(async (req, res) => {
   //get user details from frontend - here only data are handle for file to get handle we do that in userroute with upload(multer)
@@ -367,6 +368,55 @@ if(!channel?.length)
 return res.status(200)
 .json(new ApiResponse(200,channel[0],"user channel fetched succesfully"))
 })
+
+const getWatchHistory=asyncHandler(async(req,res)=>{
+  const user=await User.aggregate([
+    {
+      $match:{
+        // _id:req.body._id //here we cant write it like this
+        //as in behind the scene the id is a string and to get the true id  the mongoose convert the string to the object id 
+        //but in aggregation the mongoose doesnt work
+        // _id:new mongoose.Types.ObjectId(req.user._id) //depricated
+        _id:new ObjectId(req.user._id)
+      }
+    },
+    {
+      $lookup:{
+        from:"videos", // the model we want to look
+        localField:"watchHistory", //in user
+        foreignField:"_id",
+        as: "watchHistory", //now we need a sub pipeline as in vidoe model there is a owner element which itself is a new model
+        pipeline:[ //sub pipeline //now we are in vidoes model right //all this will go in owner field
+          {
+            $lookup:{
+              from:'users',
+              localField:"owner",
+              foreignField:"_id",
+              as:"owner",
+              pipeline:[{ //now we dont want unnecesary fields so to keep only what you want
+                $project:{
+                  fullName:1,
+                  username:1,
+                  avatar:1
+                }
+              }]
+            }
+          },
+          //after lookup the output will be in the form of array, so we need to get the first value only
+          {
+              $addFields:{
+                owner:{ //overwriting existing fields
+                  $first:"$owner"
+                }
+              }
+          }
+        ]
+      }
+    }
+  ])
+
+  return res.status(200).json(new ApiResponse(200,user[0].watchHistory,"watch history fetched"))
+})
 export {
   registerUser,
   loginUser,
@@ -377,5 +427,6 @@ export {
   updateAccountDetails,
   updateUserAvatar,
   updateUserCoverImage,
-  getUserChannelProfile
+  getUserChannelProfile,
+  getWatchHistory
 };

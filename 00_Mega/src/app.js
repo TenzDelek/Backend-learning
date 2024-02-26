@@ -18,6 +18,7 @@ app.use(express.urlencoded({extended:true,limit:"16kb"}))
 //for image assets
 app.use(express.static("public"))
 
+//for using cookie
 app.use(cookieParser())
 
 //routes
